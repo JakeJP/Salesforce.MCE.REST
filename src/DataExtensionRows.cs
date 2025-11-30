@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using Yokoins.Salesforce.MC;
 
-namespace Yokins.Salesforce.MCE
+namespace Yokinsoft.Salesforce.MCE
 {
     public class DataExtensionRows : APIClientBase
     {

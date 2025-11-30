@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Yokins.Salesforce.MCE
+namespace Yokinsoft.Salesforce.MCE
 {
     public class EventNotification : APIClientBase
     {

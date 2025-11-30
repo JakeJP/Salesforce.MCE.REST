@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Yokins.Salesforce.MCE
+namespace Yokinsoft.Salesforce.MCE
 {
     public class DataExtensionImports : APIClientBase
     {

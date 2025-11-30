@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 
-namespace Yokins.Salesforce.MCE
+namespace Yokinsoft.Salesforce.MCE
 {
     public abstract class APIClientBase
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Yokins.Salesforce.MCE
+namespace Yokinsoft.Salesforce.MCE
 {
     public class Journeys : APIClientBase
     {

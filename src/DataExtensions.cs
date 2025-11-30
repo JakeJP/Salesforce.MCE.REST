@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Yokoins.Salesforce.MC;
 
-namespace Yokins.Salesforce.MCE
+namespace Yokinsoft.Salesforce.MCE
 {
     public class DataExtensions : APIClientBase
     {

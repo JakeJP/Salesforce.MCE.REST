@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Yokins.Salesforce.MCE</AssemblyName>
-    <RootNamespace>Yokins.Salesforce.MCE</RootNamespace>
+    <AssemblyName>Yokinsoft.Salesforce.MCE</AssemblyName>
+    <RootNamespace>Yokinsosft.Salesforce.MCE</RootNamespace>
     <Title>.NET client library for Salesforce Marketing Cloud Engagement REST API</Title>
     <Copyright>Yokinsoft Jake.Y.Yoshimura</Copyright>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
