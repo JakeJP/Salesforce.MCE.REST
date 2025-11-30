@@ -17,7 +17,7 @@ Auth endpoint URI looks like `https://{subdomain}.auth.marketingcloudapis.com/v2
 `{subdomain}` can be used instead of full endpoint URI.
 
 ```csharp
-using Yokinsoft.Salesforce.MCE;
+using Yokins.Salesforce.MCE;
 var auth = new Auth("YOUR_AUTH_ENDPOINT_OR_DOMAIN");
 var accessToken = auth.GetAccessToken("YOUR_MEMBER_ID", "YOUR_CLIENT_ID", "YOUR_CLIENT_SECRET" );
 ```
@@ -93,7 +93,7 @@ Jake Y. Yoshimura [Yokinsoft](https://www.yo-ki.com)
 
 # License
 
-This project is licensed under the MIT License - see the [LICENSE](LICEENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 # Copyright
 
