@@ -46,7 +46,9 @@ namespace Yokinsoft.Salesforce.MCE
             }
         }
 
+        [Obsolete("Use CreateDataReader() method instead.")]
         public IDataReader AsDataReader() => new DataExtensionDataReader(this);
+        public IDataReader CreateDataReader() => new DataExtensionDataReader(this);
 
         internal Func<DataExtensionItemListContainer> GetNext = null;
         internal Func<DataExtensionItemListContainer> GetPrev = null;

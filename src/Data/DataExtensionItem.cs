@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Yokinsoft.Salesforce.MCE
@@ -12,5 +13,8 @@ namespace Yokinsoft.Salesforce.MCE
         // Values can contain strings or date strings; keep as string dictionary for simplicity
         [JsonPropertyName("values")]
         public Dictionary<string, string> Values { get; set; } = new Dictionary<string, string>();
+
+        internal Dictionary<string,string> Flatten()
+            => Keys.Concat(Values).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
     }
 }
