@@ -67,6 +67,8 @@ and page size information, which can be used for pagenation that reuiqres multip
 Using LINQ or IDataReader, you can easily consume Data Extension rows over the page size limit (2500)
 , where multiple API calls are made internally to fetch all rows.
 
+### DataExtension => Local container (IEnumerable or DataTable)
+
 ```c#
 var dd = new DataExtensionData(accessToken);
 var container = dd.GetData("[Data extension ID]");
@@ -81,11 +83,19 @@ foreach( var row in container.AsEnumerable()){
 // consume as IDataReader
 
 var table = new DataTable();
-table.Load( container.AsDataReader() );
-
+table.Load( container.CreateDataReader() );
 ```
 
 IDataReader provides data type for each column based on the Data Extension field definition.
+
+### Local container (DataTable) => DataExtension
+
+```c#
+var table = new DataTable();
+// fill table with data ans set PrimaryKey column(s)
+var dd = new DataExtensionData(accessToken);
+dd.UpsertRowSetByKey("[Data extension ID]", table.CreateDataReader());
+```
 
 # Author
 
@@ -101,4 +111,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 # Revision History
 
+- 2025-12-02 some fixes and additions
 - 2025-11-30 Initial version
