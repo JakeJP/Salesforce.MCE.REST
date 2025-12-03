@@ -17,7 +17,7 @@ Auth endpoint URI looks like `https://{subdomain}.auth.marketingcloudapis.com/v2
 `{subdomain}` can be used instead of full endpoint URI.
 
 ```csharp
-using Yokins.Salesforce.MCE;
+using Yokinsosft.Salesforce.MCE;
 var auth = new Auth("YOUR_AUTH_ENDPOINT_OR_DOMAIN");
 var accessToken = auth.GetAccessToken("YOUR_MEMBER_ID", "YOUR_CLIENT_ID", "YOUR_CLIENT_SECRET" );
 ```
@@ -33,7 +33,7 @@ if( !accessToken.IsValid )
 
 ## 2. Initialize API client
 
-Along with the API document sections, multiple API clients are defined per purpose.
+Along with the [Salesforce MCE API document](https://developer.salesforce.com/docs/marketing/marketing-cloud/references/mc_rest_summary/summary.html) sections, multiple API clients are defined per purpose.
 
 `DataExtensions` for Data Extentions section, DataExtentionRows for Data Extension Rows section, and so on.
 
@@ -76,7 +76,7 @@ Using LINQ or IDataReader, you can easily consume Data Extension rows over the p
 var dd = new DataExtensionData(accessToken);
 var container = dd.GetData("[Data extension ID]");
 
-// consume as IEnumerable<DataExtensionItem>
+// consume as IEnumerable<DataExtension.Item>
 
 foreach( var row in container.AsEnumerable()){
 	row.Keys; // as Dictionary<string,string>
@@ -90,12 +90,24 @@ table.Load( container.CreateDataReader() );
 ```
 
 IDataReader provides data type for each column based on the Data Extension field definition.
+Additionary you can add options to limit the result:
+
+- filter
+- fields
+- orderBy
+- top
+- offset
+- pagesize 
+
+```c#
+var container = dd.GetDataByKey("[Data extension Key]", top: 100 );
+```
 
 ### Local container (DataTable) => DataExtension
 
 ```c#
 var table = new DataTable();
-// fill table with data ans set PrimaryKey column(s)
+// fill table with data and set PrimaryKey column(s)
 var dd = new DataExtensionData(accessToken);
 dd.UpsertRowSetByKey("[Data extension ID]", table.CreateDataReader());
 ```
@@ -110,7 +122,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 # Copyright
 
-&copy; 2025 Yokinsoft, Jake Y.Yoshimura under 
+&copy; 2025 Yokinsoft, Jake Y.Yoshimura
 
 # Revision History
 
