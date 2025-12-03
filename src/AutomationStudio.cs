@@ -36,63 +36,99 @@ namespace Yokinsoft.Salesforce.MCE
         {
             Post<object>($"/automation/v1/automations/{Uri.UnescapeDataString(id)}/actions/runallonce", null);
         }
-        void UpdateAutomationFileTrigger()
+        public void UpdateAutomationFileTrigger( string id, bool isActive)
         {
-            throw new NotImplementedException();
+            Patch<object>($"/automation/v1/automations/filetrigger/{id}", new { isActive });
         }
-        void UpdateAutomationFileTriggerByKey()
+        public void UpdateAutomationFileTriggerByKey( string key, bool isActive)
         {
-            throw new NotImplementedException();
+            Patch<object>($"/automation/v1/automations/filetrigger/key:{key}", new { isActive });
         }
         public void ExecuteAutomationActivitiesByKey( string key)
         {
             Post<object>($"/automation/v1/automations/key:{Uri.UnescapeDataString(key)}/actions/runallonce", null);
         }
-
+        public TriggeredAutomationResult ExecuteTriggeredAutomation()
+        {
+            return Post<TriggeredAutomationResult>("/automation/v1/automations/trigger",null);
+        }
         public AutomationTriggerStatus GetTriggerStatus( string requestId)
         {
             return Get<AutomationTriggerStatus>($"/automation/v1/automations/trigger/status/{Uri.EscapeDataString(requestId)}");
         }
 
-        void GetFileTransferActivities()
+        public void UpdateAutomationTrigger( string id, bool isActive )
         {
-            throw new NotImplementedException();
+            Patch<object>($"/automation/v1/automations/trigger/{id}", new { isActive });
         }
-        void CreateFileTransferActivity()
+
+        public AutomationTriggerStatus GetTriggerStatus( string requestId, string subdomain )
         {
-            throw new NotImplementedException();
+            return Get<AutomationTriggerStatus>($"/automation/v1/automations/trigger/status/{requestId}", new Dictionary<string, string> { { "subdomain", subdomain } });
         }
-        void DeleteFileTransferActivity()
+
+        public PageableListContainer<FileTransferActivitySimplified> GetFileTransferActivities( string subdomain, int page = 0, int pagesize = 0, string filter = null, string orderBy = null )
         {
-            throw new NotImplementedException();
+            return Get<PageableListContainer<FileTransferActivitySimplified>>("/automation/v1/fileTransfers", new Dictionary<string, string>
+            {
+                {"subdomain", subdomain },
+                {"$filter", filter },
+                {"$orderBy", orderBy },
+                {"$page", page > 0 ? page.ToString() : null},
+                {"$pagesize", pagesize > 0 ? pagesize.ToString() : null }
+            });
         }
-        void GetFileTransferActivity()
+        public FileTransferActivity CreateFileTransferActivity(FileTransferActivityToCreate fileTransferActivity)
         {
-            throw new NotImplementedException();
+            return Post<FileTransferActivity>("/automation/v1/fileTransfers", fileTransferActivity);
         }
-        void UpdateFileTransferActivity()
+        public void DeleteFileTransferActivity( string fileTransferActivityId)
         {
-            throw new NotImplementedException();
+            Delete<object>($"/automation/v1/fileTransfers/{fileTransferActivityId}", null);
         }
-        void StartFileTransferActivity()
+        public FileTransferActivity GetFileTransferActivity(string fileTransferActivityId)
         {
-            throw new NotImplementedException();
+            return Get<FileTransferActivity>($"/automation/v1/fileTransfers/{fileTransferActivityId}");
         }
-        void GetAutomationFolders()
+        public FileTransferActivity UpdateFileTransferActivity( string fileTransferActivityId, FileTransferActivityToCreate activity )
         {
-            throw new NotImplementedException();
+            return Patch<FileTransferActivity>($"/automation/v1/fileTransfers/{fileTransferActivityId}", activity);
         }
-        void GetFtpLocations()
+        public void StartFileTransferActivity(string fileTransferActivityId, string subdomain)
         {
-            throw new NotImplementedException();
+            Post<object>($"/automation/v1/fileTransfers/{fileTransferActivityId}/start",
+                new { subdomain });
         }
-        void GetAutomationScriptActivities()
+        public IList<AutomationFolder> GetAutomationFolders( string subdomain, string filter )
         {
+            return Get<PageableListContainer<AutomationFolder>>("/automation/v1/folders", new Dictionary<string, string>
+            {
+                {"subdomain", subdomain },
+                {"$filter", filter }
+            }).Items;
 
         }
-        void ExecuteScriptActivity()
+        public IList<AutomationFtpLocation> GetFtpLocations( string subdomain )
         {
-
+            return Get<PageableListContainer<AutomationFtpLocation>>("/automation/v1/ftpLocations", new Dictionary<string, string>
+            {
+                {"subdomain", subdomain }
+            }).Items;
+        }
+        public PageableListContainer<AutomationSsjsActivity> GetAutomationScriptActivities( string subdomain, string filter = null, string orderBy = null, int page = 0, int pagesize = 0 )
+        {
+            return Get<PageableListContainer<AutomationSsjsActivity>>("/automation/v1/scripts", new Dictionary<string, string>
+            {
+                {"subdomain", subdomain },
+                {"$filter", filter },
+                {"$orderBy", orderBy },
+                {"$page", page > 0 ? page.ToString() : null},
+                {"$pagesize", pagesize > 0 ? pagesize.ToString() : null }
+            });
+        }
+        public void ExecuteScriptActivity( string ssjsId, string subdomain)
+        {
+            Post<object>($"/automation/v1/scripts/{ssjsId}/start", new { subdomain });
         }
     }
 }

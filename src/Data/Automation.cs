@@ -111,32 +111,6 @@ namespace Yokinsoft.Salesforce.MCE
 
         [JsonPropertyName("activities")]
         public List<AutomationActivity> Activities { get; set; } = new List<AutomationActivity>();
-
-        public static AutomationStep FromJson(string json)
-        {
-            if (string.IsNullOrWhiteSpace(json))
-                throw new ArgumentException("json must not be empty", nameof(json));
-
-            var opts = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                AllowTrailingCommas = true
-            };
-
-            return JsonSerializer.Deserialize<AutomationStep>(json, opts);
-        }
-
-        public string ToJson()
-        {
-            var opts = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = false,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            };
-
-            return JsonSerializer.Serialize(this, opts);
-        }
     }
 
     public class AutomationActivity
@@ -185,5 +159,117 @@ namespace Yokinsoft.Salesforce.MCE
 
         [JsonPropertyName("automationExternalKey")]
         public string AutomationExternalKey { get; set; }
+    }
+
+    public class TriggeredAutomationResult
+    {
+        [JsonPropertyName("fileTransferLocationKey")]
+        public string FileTransferLocationKey { get; set; }
+        [JsonPropertyName("filename")]
+        public string Filename { get; set; }
+        [JsonPropertyName("relativePath")]
+        public string RelativePath { get; set; }
+        [JsonPropertyName("deduplicationKey")]
+        public string DeduplicationKey { get; set; }
+    }
+    public abstract class FileTransferActivityBase
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+        [JsonPropertyName("customerKey")]
+        public string CustomerKey { get; set; }
+        [JsonPropertyName("createdDate")]
+        public DateTime CreatedDate { get; set; }
+        [JsonPropertyName("modifiedDate")]
+        public DateTime ModifiedDate { get; set; }
+    }
+    public class FileTransferActivitySimplified : FileTransferActivityBase
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+    }
+    public class FileTransferActivityToCreate : FileTransferActivityBase
+    {
+
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+        [JsonPropertyName("fileSpec")]
+        public string FileSpec { get; set; }
+
+        [JsonPropertyName("isEncrypted")]
+        public bool IsEncrypted { get; set; }
+
+        [JsonPropertyName("isCompressed")]
+        public bool IsCompressed { get; set; }
+
+        [JsonPropertyName("maxFileAge")]
+        public int MaxFileAge { get; set; }
+
+        [JsonPropertyName("maxFileAgeScheduleOffset")]
+        public int MaxFileAgeScheduleOffset { get; set; }
+
+        [JsonPropertyName("maxImportFrequency")]
+        public int MaxImportFrequency { get; set; }
+
+        [JsonPropertyName("fileTransferLocationId")]
+        public string FileTransferLocationId { get; set; }
+
+        [JsonPropertyName("isUpload")]
+        public bool IsUpload { get; set; }
+
+        [JsonPropertyName("isPgp")]
+        public bool IsPgp { get; set; }
+
+        [JsonPropertyName("isFileSpecLocalized")]
+        public bool IsFileSpecLocalized { get; set; }
+
+        [JsonPropertyName("publicKeyManagementId")]
+        public int? PublicKeyManagementId { get; set; }
+    }
+    public class FileTransferActivity : FileTransferActivityToCreate
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+    }
+    public class AutomationFolder
+    {
+        [JsonPropertyName("categoryId")]
+        public long CategoryId { get; set; }
+        [JsonPropertyName("categoryType")]
+        public string CategoryType { get; set; }
+        [JsonPropertyName("hasChildren")]
+        public bool HasChildren { get; set; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+        [JsonPropertyName("parentId")]
+        public string ParentId { get; set; }
+    }
+    public class AutomationFtpLocation
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+        [JsonPropertyName("locationTypeId")]
+        public int LocationTypeId { get; set; }
+        [JsonPropertyName("locationUrl")]
+        public string LocationUrl { get; set; }
+    }
+    public class AutomationSsjsActivity
+    {
+        [JsonPropertyName("ssjsActivityId")]
+        public string SsjsActivityId { get; set; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+        [JsonPropertyName("key")]
+        public string Key { get; set; }
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+        [JsonPropertyName("categoryId")]
+        public long CategoryId { get; set; }
+        [JsonPropertyName("createdDate")]
+        public DateTime CreatedDate { get; set; }
+        [JsonPropertyName("modifiedDate")]
+        public DateTime ModifiedDate { get; set; }
     }
 }

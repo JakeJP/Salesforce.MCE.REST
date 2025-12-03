@@ -43,11 +43,14 @@ implemented API clients are:
 | API section | Class Name | Implementation |
 |----|---------------------|:--:|
 | Auth | Auth | 〇 |
+| Automation Studio | AutomationStudio | 〇 |
+| Contacts | Contacts | △ |
 | Event Notification | EventNotification | 〇 |
 | Data Extensions | DataExtensions | 〇 |
 | Data Extension Data | DataExtensionData | 〇 |
 | Data Extension Rows | DataExtensionRows | 〇 |
 | Data Extension Imports | DataExtensionImports | 〇 |
+| Journeys and Events | JourneysAndEvents | △ |
 
 ```csharp
 

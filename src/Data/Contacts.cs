@@ -58,25 +58,25 @@ namespace Yokinsoft.Salesforce.MCE
     }
     public class ContactAttributeSet
     {
-        public class ValueItem
+        public class NameValue
         {
             [JsonPropertyName("name")]
             public string Name { get; set; }
             [JsonPropertyName("value")]
-            public string Value { get; set; }
+            public object Value { get; set; }
         }
         public class Item
         {
             [JsonPropertyName("values")]
-            public List<ValueItem> Values { get; set; }
-            
+            public List<NameValue> Values { get; set; }
+
         }
         [JsonPropertyName("name")]
         public string Name { get; set; }
         [JsonPropertyName("items")]
         public List<Item> Items { get; set; }
     }
-    public class ContactUpdateResult
+    public class ContactsOperationStatusResponse
     {
         [JsonPropertyName("operationStatus")]
         public string OperationStatus { get; set; }
@@ -111,5 +111,113 @@ namespace Yokinsoft.Salesforce.MCE
         public string ServiceMessageID { get; set; }
 
 
+    }
+   
+    public class ContactsOperationResponse
+    {
+        [JsonPropertyName("operationInitiated")]
+        public bool OperationInitiated { get; set; }
+        [JsonPropertyName("operationID")]
+        public long OperationID { get; set; }
+        [JsonPropertyName("requestServiceMessageID")]
+        public string RequestServiceMessageID { get; set; }
+        [JsonPropertyName("resultMessages")]
+        public List<ResultMessage> ResultMessages { get; set; }
+        [JsonPropertyName("serviceMessageID")]
+        public string ServiceMessageID { get; set; }
+    }
+    public class ContactsOperationStatus
+    {
+        [JsonPropertyName("operation")]
+        public ContactsOperation Operation { get; set; }
+        [JsonPropertyName("requestServiceMessageID")]
+        public string RequestServiceMessageID { get; set; }
+        [JsonPropertyName("resultMessages")]
+        public List<ResultMessage> ResultMessages { get; set; }
+        [JsonPropertyName("serviceMessageID")]
+        public string ServiceMessageID { get; set; }
+    }
+    public class ContactsOperation
+    {
+        [JsonPropertyName("listTypeID")]
+        public int ListTypeId { get; set; }
+
+        [JsonPropertyName("listIdentifier")]
+        public string ListIdentifier { get; set; }
+
+        [JsonPropertyName("listKey")]
+        public string ListKey { get; set; }
+
+        [JsonPropertyName("expectedListCount")]
+        public int ExpectedListCount { get; set; }
+
+        [JsonPropertyName("deleteType")]
+        public string DeleteType { get; set; }
+
+        [JsonPropertyName("deleteListOnCompleted")]
+        public bool DeleteListOnCompleted { get; set; }
+
+        [JsonPropertyName("operationID")]
+        public long OperationID { get; set; }
+
+        [JsonPropertyName("eID")]
+        public int EID { get; set; }
+
+        [JsonPropertyName("mID")]
+        public int MID { get; set; }
+
+        [JsonPropertyName("employeeID")]
+        public int EmployeeID { get; set; }
+
+        [JsonPropertyName("operationRequestID")]
+        public string OperationRequestID { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("scheduledTime")]
+        public DateTime? ScheduledTime { get; set; }
+
+        [JsonPropertyName("retryCount")]
+        public int RetryCount { get; set; }
+
+        [JsonPropertyName("createdDate")]
+        public DateTime? CreatedDate { get; set; }
+
+        [JsonPropertyName("createdBy")]
+        public int CreatedBy { get; set; }
+
+        [JsonPropertyName("modifiedDate")]
+        public DateTime? ModifiedDate { get; set; }
+
+        [JsonPropertyName("modifiedBy")]
+        public int ModifiedBy { get; set; }
+    }
+    public class ContactKeyFromEmailAddressResult
+    {
+        public class Entity
+        {
+            [JsonPropertyName("contactKeyDetails")]
+            public List<ContactKeyDetail> ContactKeyDetails = new List<ContactKeyDetail>();
+            [JsonPropertyName("channelAddress")]
+            public string ChannelAddress { get; set; }
+        }
+        public class ContactKeyDetail
+        {
+            [JsonPropertyName("contactKey")]
+            public string ContactKey { get; set; }
+            [JsonPropertyName("createDate")]    
+            public DateTime? CreateDate { get; set; }
+        }
+        [JsonPropertyName("channelAddressResponseEntities")]
+        public List<Entity> ChannelAddressResponseEntities = new List<Entity>();
+        [JsonPropertyName("requestServiceMessageID")]
+        public string RequestServiceMessageID { get; set; }
+        [JsonPropertyName("responseDateTime")]
+        public DateTime? ResponseDateTime { get; set; }
+        [JsonPropertyName("resultMessages")]
+        public List<ResultMessage> ResultMessages { get; set; } = new List<ResultMessage>();
+        [JsonPropertyName("serviceMessageID")]
+        public string ServiceMessageID { get; set; }
     }
 }

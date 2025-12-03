@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading;
 
@@ -82,9 +83,10 @@ namespace Yokinsoft.Salesforce.MCE
             var body = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             if (!resp.IsSuccessStatusCode)
                 throw new InvalidOperationException($"Failed to get data ({resp.StatusCode}): {body}");
-            var opts = new JsonSerializerOptions
+            var opts = new JsonSerializerOptions( JsonSerializerDefaults.Web )
             {
-                PropertyNameCaseInsensitive = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                //PropertyNameCaseInsensitive = true,
                 AllowTrailingCommas = true
             };
             return string.IsNullOrEmpty(body) ? default(TResponse)

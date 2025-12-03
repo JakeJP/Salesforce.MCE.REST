@@ -17,20 +17,34 @@ namespace Yokinsoft.Salesforce.MCE
         {
             return Get<object>($"/contacts/v1/contacts/{contactKey}");
         }
-        void CreateContacts()
+        public ContactsOperationStatusResponse CreateContact( string contactKey, IEnumerable<ContactAttributeSet> attributeSets )
         {
-            throw new NotImplementedException();
+            return Post<ContactsOperationStatusResponse>("/contacts/v1/contacts", new Dictionary<string, object>
+            {
+                { "attributeSets",attributeSets }, {"contactKey", contactKey}
+            });
+        }
+        public ContactsOperationStatusResponse CreateContact(long contactID, IEnumerable<ContactAttributeSet> attributeSets)
+        {
+            return Post<ContactsOperationStatusResponse>("/contacts/v1/contacts", new Dictionary<string, object>
+            {
+                { "attributeSets",attributeSets }, {"contactID", contactID}
+            });
         }
 
-        public ContactUpdateResult UpdateContacts( string contactKey, string contactId, IEnumerable<ContactAttributeSet> attributeSets )
+        public ContactsOperationStatusResponse UpdateContact( string contactKey, IEnumerable<ContactAttributeSet> attributeSets )
         {
-            return Patch<ContactUpdateResult>("/contacts/v1/contacts",
-                new
-                {
-                    contactKey = contactKey,
-                    contactId = contactId,
-                    attributeSets = attributeSets
-                });
+            return Patch<ContactsOperationStatusResponse>("/contacts/v1/contacts", new Dictionary<string, object>
+            {
+                { "attributeSets",attributeSets }, {"contactKey", contactKey}
+            });
+        }
+        public ContactsOperationStatusResponse UpdateContact(long contactID, IEnumerable<ContactAttributeSet> attributeSets)
+        {
+            return Patch<ContactsOperationStatusResponse>("/contacts/v1/contacts", new Dictionary<string, object>
+            {
+                { "attributeSets",attributeSets }, {"contactID", contactID}
+            });
         }
 
         void GetContantCount(string queryFilter)
@@ -47,9 +61,14 @@ namespace Yokinsoft.Salesforce.MCE
             throw new NotImplementedException();
         }
 
-        void GetContactKeyForEmailAddress(IEnumerable<string> channelAddressList, int maximumCount = -1)
+        public ContactKeyFromEmailAddressResult GetContactKeyForEmailAddress(IEnumerable<string> channelAddressList, int maximumCount = -1)
         {
-            throw new NotImplementedException();
+            var data = new Dictionary<string, object>
+            {
+                {"channelAddressList", channelAddressList }
+            };
+            if (maximumCount > 0) data["maximumCount"] = maximumCount;
+            return Post<ContactKeyFromEmailAddressResult>("/contacts/v1/addresses/email/search", data);
         }
 
         void GetContactDeleteOperations()
@@ -96,14 +115,42 @@ namespace Yokinsoft.Salesforce.MCE
         {
             throw new NotImplementedException();
         }
-
-        void DeleteContactsByID(IEnumerable<string> contactIds, string deleteOperationType)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="contactIds"></param>
+        /// <param name="deleteOperationType">Type of delete operation to perform. Specify ContactAndAttributes to delete a contact from the entire account as long as no other channel references that contact. AttributesOnly is reserved for future use.</param>
+        /// <exception cref="NotImplementedException"></exception>
+        public ContactsOperationResponse DeleteContactsByID(IList<long> contactIds, string deleteOperationType = "ContactAndAttributes")
         {
-            throw new NotImplementedException();
+            if( contactIds == null || contactIds.Count == 0)
+                throw new ArgumentNullException( nameof( contactIds ), "Contact IDs list cannot be null or empty." );
+            if( contactIds.Count > 50 )
+                throw new ArgumentOutOfRangeException( nameof( contactIds ), "Maximum of 50 contact IDs can be deleted in a single request." );
+            return Post<ContactsOperationResponse>("/contacts/v1/contacts/actions/delete?type=ids", new
+            {
+                values = contactIds,
+                DeleteOperationType = deleteOperationType
+            });
         }
-        void DeleteContactsByKey(IEnumerable<string> contactKeys, string deleteOperationType)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="contactKeys"></param>
+        /// <param name="deleteOperationType"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        public ContactsOperationResponse DeleteContactsByKey(IList<string> contactKeys, string deleteOperationType = "ContactAndAttributes")
         {
-            throw new NotImplementedException();
+            if (contactKeys == null || contactKeys.Count == 0)
+                throw new ArgumentNullException(nameof(contactKeys), "Contact IDs list cannot be null or empty.");
+            if (contactKeys.Count > 50)
+                throw new ArgumentOutOfRangeException(nameof(contactKeys), "Maximum of 50 contact IDs can be deleted in a single request.");
+            return Post<ContactsOperationResponse>("/contacts/v1/contacts/actions/delete?type=keys", new
+            {
+                values = contactKeys,
+                DeleteOperationType = deleteOperationType
+            });
+
         }
         void DeleteContactsByListReference()
         {
@@ -114,7 +161,10 @@ namespace Yokinsoft.Salesforce.MCE
         {
             throw new NotImplementedException();
         }
-        void GetStatusOfContactDeleteOperation(long operationId) { throw new NotImplementedException(); }
+        ContactsOperationResponse GetStatusOfContactDeleteOperation(long operationID)
+        {
+            return Get<ContactsOperationResponse>($"/contacts/v1/contacts/actions/delete/status?operationID={operationID}");
+        }
         void GetContactDeleteRequestsDetails()
         {
             throw new NotImplementedException();
@@ -127,7 +177,7 @@ namespace Yokinsoft.Salesforce.MCE
         {
             throw new NotImplementedException();
         }
-        void RestrictContactsByID(IEnumerable<string> contactIds)
+        void RestrictContactsByID(IEnumerable<long> contactIds)
         {
             throw new NotImplementedException();
         }
