@@ -120,7 +120,6 @@ namespace Yokinsoft.Salesforce.MCE
         /// </summary>
         /// <param name="contactIds"></param>
         /// <param name="deleteOperationType">Type of delete operation to perform. Specify ContactAndAttributes to delete a contact from the entire account as long as no other channel references that contact. AttributesOnly is reserved for future use.</param>
-        /// <exception cref="NotImplementedException"></exception>
         public ContactsOperationResponse DeleteContactsByID(IList<long> contactIds, string deleteOperationType = "ContactAndAttributes")
         {
             if( contactIds == null || contactIds.Count == 0)
@@ -138,7 +137,6 @@ namespace Yokinsoft.Salesforce.MCE
         /// </summary>
         /// <param name="contactKeys"></param>
         /// <param name="deleteOperationType"></param>
-        /// <exception cref="NotImplementedException"></exception>
         public ContactsOperationResponse DeleteContactsByKey(IList<string> contactKeys, string deleteOperationType = "ContactAndAttributes")
         {
             if (contactKeys == null || contactKeys.Count == 0)

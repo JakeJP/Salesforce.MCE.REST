@@ -4,7 +4,6 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text.Json.Serialization;
-using Yokoins.Salesforce.MC;
 
 namespace Yokinsoft.Salesforce.MCE
 {

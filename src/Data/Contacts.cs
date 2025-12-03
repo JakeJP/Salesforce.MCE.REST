@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.Json.Serialization;
-using Yokoins.Salesforce.MC;
 
 namespace Yokinsoft.Salesforce.MCE
 {
@@ -84,7 +82,7 @@ namespace Yokinsoft.Salesforce.MCE
 
 
     }
-   
+
     public class ContactsOperationResponse
     {
         public bool OperationInitiated { get; set; }

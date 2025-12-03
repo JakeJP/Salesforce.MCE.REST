@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using Yokoins.Salesforce.MC;
 
 namespace Yokinsoft.Salesforce.MCE
 {

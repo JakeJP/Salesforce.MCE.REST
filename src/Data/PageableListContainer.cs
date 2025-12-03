@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Yokoins.Salesforce.MC
+namespace Yokinsoft.Salesforce.MCE
 {
     public class PageableListContainer<TItem>
     {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Yokoins.Salesforce.MC;
 using static Yokinsoft.Salesforce.MCE.DataExtension;
 
 namespace Yokinsoft.Salesforce.MCE
