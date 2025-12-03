@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Yokoins.Salesforce.MC;
+using static Yokinsoft.Salesforce.MCE.DataExtension;
 
 namespace Yokinsoft.Salesforce.MCE
 {
@@ -40,23 +41,23 @@ namespace Yokinsoft.Salesforce.MCE
             // POST https://{subdomain}.rest.marketingcloudapis.com/data/v1/customobjects/{id}/cleardata
             Post<object>($"/data/v1/customobjects/{Uri.EscapeDataString(id)}/cleardata", null);
         }
-        public IList<DataExtensionField> GetDataExtensionFields(string id)
+        public IList<DataExtension.Field> GetDataExtensionFields(string id)
         {
-            var res = Get<DataExtensionFieldListContainer>($"/data/v1/customobjects/{Uri.EscapeDataString(id)}/fields");
+            var res = Get<FieldListContainer>($"/data/v1/customobjects/{Uri.EscapeDataString(id)}/fields");
             return res.Fields;
         }
-        public IList<DataExtensionField> GetDataExtensionFieldsCategoryId(string id)
+        public IList<DataExtension.Field> GetDataExtensionFieldsCategoryId(string id)
         {
             // GET https://{subdomain}.rest.marketingcloudapis.com/data/v1/customobjects/category/{categoryId}
-            var res = Get<DataExtensionFieldListContainer>($"/data/v1/customobjects/category/{Uri.EscapeDataString(id)}");
+            var res = Get<FieldListContainer>($"/data/v1/customobjects/category/{Uri.EscapeDataString(id)}");
             return res.Fields;
         }
-        public void UpdateDataExtensionField(string id, IEnumerable<DataExtensionField> fields)
+        public void UpdateDataExtensionField(string id, IEnumerable<DataExtension.Field> fields)
         {
             // PATCH https://{subdomain}.rest.marketingcloudapis.com/data/v1/customobjectsasync/{id}/fields
             Patch<object>($"/data/v1/customobjectsasync/{Uri.EscapeDataString(id)}/fields", new { fields });
         }
-        public void CreateDataExtensionField(string id, IEnumerable<DataExtensionFieldToCreate> fields)
+        public void CreateDataExtensionField(string id, IEnumerable<DataExtension.FieldToCreate> fields)
         {
             // POST        https://{subdomain}.rest.marketingcloudapis.com/data/v1/customobjectsasync/{id}/fields
             Post<object>($"/data/v1/customobjectsasync/{Uri.EscapeDataString(id)}/fields", new { fields });

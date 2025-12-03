@@ -69,12 +69,18 @@ namespace Yokinsoft.Salesforce.MCE
                 url = AccessToken.RestInstanceUrl.TrimEnd(new [] { '/' }) + url;
 
             var http = _sharedHttpClient;
+            var opts = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                //PropertyNameCaseInsensitive = true,
+                AllowTrailingCommas = true
+            };
 
             var request = new HttpRequestMessage(method, url)
             {
                 Content = contentObject == null ? null :
                     new StringContent(
-                        JsonSerializer.Serialize(contentObject),
+                        JsonSerializer.Serialize(contentObject,opts),
                         Encoding.UTF8,
                         "application/json"),
             };
@@ -83,12 +89,6 @@ namespace Yokinsoft.Salesforce.MCE
             var body = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             if (!resp.IsSuccessStatusCode)
                 throw new InvalidOperationException($"Failed to get data ({resp.StatusCode}): {body}");
-            var opts = new JsonSerializerOptions( JsonSerializerDefaults.Web )
-            {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                //PropertyNameCaseInsensitive = true,
-                AllowTrailingCommas = true
-            };
             return string.IsNullOrEmpty(body) ? default(TResponse)
                 : JsonSerializer.Deserialize<TResponse>(body, opts);
         }

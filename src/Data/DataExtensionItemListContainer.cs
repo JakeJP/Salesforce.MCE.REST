@@ -3,32 +3,25 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Text.Json.Serialization;
 using Yokoins.Salesforce.MC;
 
 namespace Yokinsoft.Salesforce.MCE
 {
-    public class DataExtensionItemListContainer : PageableListContainer<DataExtensionItem>
+    public class DataExtensionItemListContainer : PageableListContainer<DataExtension.Item>
     {
-        [JsonPropertyName("links")]
         public Links Links { get; set; }
 
-        [JsonPropertyName("requestToken")]
         public string RequestToken { get; set; }
 
-        [JsonPropertyName("tokenExpireDateUtc")]
         public DateTime? TokenExpireDateUtc { get; set; }
 
-        [JsonPropertyName("customObjectId")]
         public string CustomObjectId { get; set; }
 
-        [JsonPropertyName("customObjectKey")]
         public string CustomObjectKey { get; set; }
 
-        [JsonPropertyName("top")]
         public int Top { get; set; }
 
-        public IEnumerable<DataExtensionItem> AsEnumerable()
+        public IEnumerable<DataExtension.Item> AsEnumerable()
         {
             var currentContainer = this;
             while (currentContainer != null)
@@ -52,7 +45,7 @@ namespace Yokinsoft.Salesforce.MCE
 
         internal Func<DataExtensionItemListContainer> GetNext = null;
         internal Func<DataExtensionItemListContainer> GetPrev = null;
-        internal Func<IList<DataExtensionField>> GetFields = null;
+        internal Func<IList<DataExtension.Field>> GetFields = null;
 
 
         /// <summary>
@@ -62,18 +55,18 @@ namespace Yokinsoft.Salesforce.MCE
         /// </summary>
         private class DataExtensionDataReader : IDataReader
         {
-            private List<DataExtensionItem> _items;
+            private List<DataExtension.Item> _items;
             private readonly List<string> _fieldNames;
             private readonly HashSet<string> _keyFieldSet;
             private readonly Dictionary<string, int> _nameToOrdinal;
-            private IDictionary<string, DataExtensionField> _defields;
+            private IDictionary<string, DataExtension.Field> _defields;
             private int _rowIndex = -1;
             private bool _closed;
             private Func<DataExtensionItemListContainer> _getNext;
             private Func<DataExtensionItemListContainer> _getPrev;
             public DataExtensionDataReader(DataExtensionItemListContainer container)
             {
-                _items = container?.Items ?? new List<DataExtensionItem>();
+                _items = container?.Items ?? new List<DataExtension.Item>();
                 _fieldNames = new List<string>();
                 _nameToOrdinal = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
                 _keyFieldSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -313,13 +306,10 @@ namespace Yokinsoft.Salesforce.MCE
 
     public class Links
     {
-        [JsonPropertyName("previous")]
         public string Previous { get; set; }
 
-        [JsonPropertyName("self")]
         public string Self { get; set; }
 
-        [JsonPropertyName("next")]
         public string Next { get; set; }
     }
 

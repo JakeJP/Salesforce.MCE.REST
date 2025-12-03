@@ -127,13 +127,13 @@ namespace Yokinsoft.Salesforce.MCE
         }
         #endregion
         #region Synchronous
-        public DataExtensionItem UpsertRow(string dataExtensionId, DataExtensionItem item)
+        public DataExtension.Item UpsertRow(string dataExtensionId, DataExtension.Item item)
         {
-            return Put<DataExtensionItem>($"/hub/v1/dataevents/{Uri.EscapeDataString(dataExtensionId)}/rows/{string.Join(",", item.Keys.Select(kv => Uri.EscapeDataString(kv.Key) + ":" + Uri.EscapeDataString(kv.Value)))}", new { values = item.Values });
+            return Put<DataExtension.Item>($"/hub/v1/dataevents/{Uri.EscapeDataString(dataExtensionId)}/rows/{string.Join(",", item.Keys.Select(kv => Uri.EscapeDataString(kv.Key) + ":" + Uri.EscapeDataString(kv.Value)))}", new { values = item.Values });
         }
-        public DataExtensionItem UpsertRowByKey(string dataExtensionKey, DataExtensionItem item)
+        public DataExtension.Item UpsertRowByKey(string dataExtensionKey, DataExtension.Item item)
         {
-            return Put<DataExtensionItem>($"/hub/v1/dataevents/key:{Uri.EscapeDataString(dataExtensionKey)}/rows/{string.Join(",", item.Keys.Select(kv => Uri.EscapeDataString(kv.Key) + ":" + Uri.EscapeDataString(kv.Value)))}", new { values = item.Values });
+            return Put<DataExtension.Item>($"/hub/v1/dataevents/key:{Uri.EscapeDataString(dataExtensionKey)}/rows/{string.Join(",", item.Keys.Select(kv => Uri.EscapeDataString(kv.Key) + ":" + Uri.EscapeDataString(kv.Value)))}", new { values = item.Values });
         }
         public void IncrementColumnValue(string dataExtensionId, string primaryKey, string primaryKeyValue, string column, int? step = null)
         {
@@ -153,9 +153,9 @@ namespace Yokinsoft.Salesforce.MCE
         /// <param name="dataExtensionId"></param>
         /// <param name="items"></param>
         /// <returns></returns>
-        public List<DataExtensionItem> UpsertRowSet(string dataExtensionId, IEnumerable<DataExtensionItem> items)
+        public List<DataExtension.Item> UpsertRowSet(string dataExtensionId, IEnumerable<DataExtension.Item> items)
         {
-            return Post<List<DataExtensionItem>>($"/hub/v1/dataevents/{Uri.EscapeDataString(dataExtensionId)}/rowset", items);
+            return Post<List<DataExtension.Item>>($"/hub/v1/dataevents/{Uri.EscapeDataString(dataExtensionId)}/rowset", items);
         }
         /// <summary>
         /// Synchronous version of UpsertRowSet that takes dataExtensionKey as key. Number of items should not exceed 50.
@@ -163,9 +163,9 @@ namespace Yokinsoft.Salesforce.MCE
         /// <param name="dataExtensionKey"></param>
         /// <param name="items"></param>
         /// <returns></returns>
-        public List<DataExtensionItem> UpsertRowSetByKey(string dataExtensionKey, IEnumerable<DataExtensionItem> items)
+        public List<DataExtension.Item> UpsertRowSetByKey(string dataExtensionKey, IEnumerable<DataExtension.Item> items)
         {
-            return Post<List<DataExtensionItem>>($"/hub/v1/dataevents/key:{Uri.EscapeDataString(dataExtensionKey)}/rowset", items);
+            return Post<List<DataExtension.Item>>($"/hub/v1/dataevents/key:{Uri.EscapeDataString(dataExtensionKey)}/rowset", items);
         }
         #endregion
 
@@ -178,16 +178,16 @@ namespace Yokinsoft.Salesforce.MCE
         /// <param name="dataExtensionId"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        public List<DataExtensionItem> UpsertRowSet(string dataExtensionId, IDataReader dataReader )
+        public List<DataExtension.Item> UpsertRowSet(string dataExtensionId, IDataReader dataReader )
         {
             var url = $"/hub/v1/dataevents/{Uri.EscapeDataString(dataExtensionId)}/rowset";
             var items = DataReaderToDataExetnsionItems(dataReader);
             var total = items.Count;
-            List<DataExtensionItem> result = null;
+            List<DataExtension.Item> result = null;
             for( var i = 0; i< total; i += maximumRowsSynchronous)
             {
                 var batch = items.Skip(i).Take(Math.Min(maximumRowsSynchronous, total - i)).ToList();
-                var res = Post<List<DataExtensionItem>>(url, batch);
+                var res = Post<List<DataExtension.Item>>(url, batch);
                 if( result == null )
                     result = res;
                 else
@@ -202,16 +202,16 @@ namespace Yokinsoft.Salesforce.MCE
         /// <param name="dataExtensionKey"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        public List<DataExtensionItem> UpsertRowSetByKey(string dataExtensionKey, IDataReader dataReader)
+        public List<DataExtension.Item> UpsertRowSetByKey(string dataExtensionKey, IDataReader dataReader)
         {
             var url = $"/hub/v1/dataevents/key:{Uri.EscapeDataString(dataExtensionKey)}/rowset";
             var items = DataReaderToDataExetnsionItems(dataReader);
             var total = items.Count;
-            List<DataExtensionItem> result = null;
+            List<DataExtension.Item> result = null;
             for (var i = 0; i < total; i += maximumRowsSynchronous)
             {
                 var batch = items.Skip(i).Take(Math.Min(maximumRowsSynchronous, total - i)).ToList();
-                var res = Post<List<DataExtensionItem>>(url, batch);
+                var res = Post<List<DataExtension.Item>>(url, batch);
                 if (result == null)
                     result = res;
                 else
@@ -220,11 +220,11 @@ namespace Yokinsoft.Salesforce.MCE
             return result;
         }
 
-        List<DataExtensionItem> DataReaderToDataExetnsionItems( IDataReader dataReader )
+        List<DataExtension.Item> DataReaderToDataExetnsionItems( IDataReader dataReader )
         {
             if (dataReader == null) throw new ArgumentNullException(nameof(dataReader));
 
-            var result = new List<DataExtensionItem>();
+            var result = new List<DataExtension.Item>();
 
             // collect column names
             int fieldCount = dataReader.FieldCount;
@@ -264,7 +264,7 @@ namespace Yokinsoft.Salesforce.MCE
             // Read rows
             while (dataReader.Read())
             {
-                var item = new DataExtensionItem();
+                var item = new DataExtension.Item();
                 item.Keys = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 item.Values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
