@@ -43,17 +43,11 @@ namespace Yokinsoft.Salesforce.MCE
         }
        
         protected TResponse Post<TResponse>(string url, object contentObject)
-        {
-            return SendWithBody<TResponse>( HttpMethod.Post, url, contentObject );
-        }
+            => SendWithBody<TResponse>( HttpMethod.Post, url, contentObject );
         protected TResponse Put<TResponse>(string url, object contentObject = null )
-        {
-            return SendWithBody<TResponse>(HttpMethod.Put, url, contentObject);
-        }
+            => SendWithBody<TResponse>(HttpMethod.Put, url, contentObject);
         protected TResponse Delete<TResponse>(string url, object contentObject = null)
-        {
-            return SendWithBody<TResponse>(HttpMethod.Delete, url, contentObject );
-        }
+            => SendWithBody<TResponse>(HttpMethod.Delete, url, contentObject );
         protected TResponse Patch<TResponse>(string url, object contentObject = null)
             => SendWithBody<TResponse>(new HttpMethod("PATCH"), url, contentObject);
 

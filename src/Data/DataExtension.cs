@@ -5,6 +5,13 @@ using System.Text.Json.Serialization;
 
 namespace Yokinsoft.Salesforce.MCE
 {
+    /// <summary>
+    /// Provides a base class for representing common properties of a data extension, including metadata, ownership, and
+    /// configuration settings.
+    /// </summary>
+    /// <remarks>This abstract class is intended to be inherited by types that model data extensions with
+    /// shared characteristics, such as name, key, sendability, retention policies, and audit information. It
+    /// centralizes common fields to promote consistency and reuse across data extension implementations.</remarks>
     public abstract class DataExtensionCommon
     {
         public string Name { get; set; }
@@ -64,16 +71,28 @@ namespace Yokinsoft.Salesforce.MCE
         public string Id { get; set; }
 
         public int? FieldCount { get; set; }
+        /// <summary>
+        /// Represents a data record of a DataExtension.
+        /// This is a member of DataExtensionItemListContainer which is returned by
+        /// GetData call.
+        /// An item that contains case-insensitive collections of keys and values as string pairs.
+        /// </summary>
+        /// <remarks>The Keys and Values dictionaries use case-insensitive string comparison for their
+        /// keys. Key names may be normalized to lowercase and may not preserve their original casing. This class is
+        /// intended for scenarios where key/value pairs must be accessed without regard to case sensitivity.</remarks>
         public class Item
         {
-            // Keys are typically simple string key/value pairs
-            public Dictionary<string, string> Keys { get; set; } = new Dictionary<string, string>();
-
-            // Values can contain strings or date strings; keep as string dictionary for simplicity
-            public Dictionary<string, string> Values { get; set; } = new Dictionary<string, string>();
+            /// <summary>
+            /// Keys are typically simple string key/value pairs.
+            /// Key names are case insensitive and can be changed to lowercase and may differ from the original casing.
+            /// </summary>
+            [JsonConverter(typeof(CaseInsensitiveDictionaryConverter))]
+            public Dictionary<string, string> Keys { get; set; } = new Dictionary<string, string>( StringComparer.InvariantCultureIgnoreCase );
+            [JsonConverter(typeof(CaseInsensitiveDictionaryConverter))]
+            public Dictionary<string, string> Values { get; set; } = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
             internal Dictionary<string, string> Flatten()
-                => Keys.Concat(Values).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                => Keys.Concat(Values).ToDictionary(kvp => kvp.Key, kvp => kvp.Value, StringComparer.InvariantCultureIgnoreCase);
         }
 
         public class FieldToCreate
@@ -115,7 +134,7 @@ namespace Yokinsoft.Salesforce.MCE
                     switch ((Type ?? "").ToLower())
                     {
                         case "text": return typeof(string);
-                        case "number": return typeof(decimal);
+                        case "number": return typeof(int);
                         case "date": return typeof(DateTime);
                         case "boolean": return typeof(bool);
                         case "decimal": return typeof(decimal);

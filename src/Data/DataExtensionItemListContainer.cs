@@ -195,7 +195,12 @@ namespace Yokinsoft.Salesforce.MCE
 
             public short GetInt16(int i) => ConvertTo<short>(i, s => short.Parse(s, CultureInfo.InvariantCulture));
 
-            public bool GetBoolean(int i) => ConvertTo<bool>(i, s => bool.Parse(s));
+            public bool GetBoolean(int i) => ConvertTo<bool>(i,
+                s =>
+                    bool.TryParse(s, out var result) ? result :
+                    (s == "1" || s.Equals("y", StringComparison.OrdinalIgnoreCase) || s.Equals("yes", StringComparison.OrdinalIgnoreCase)) ? true :
+                    (s == "0" || s.Equals("n", StringComparison.OrdinalIgnoreCase) || s.Equals("no", StringComparison.OrdinalIgnoreCase)) ? false :
+                    throw new FormatException($"String '{s}' was not recognized as a valid Boolean.") );
 
             public DateTime GetDateTime(int i) => ConvertTo<DateTime>(i, s => DateTime.Parse(s, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal));
 
@@ -270,23 +275,23 @@ namespace Yokinsoft.Salesforce.MCE
                 table.Columns.Add("ColumnSize", typeof(long));
                 table.Columns.Add("DataType", typeof(Type));
                 table.Columns.Add("AllowDBNull", typeof(bool));
-                // Mark primary key columns
                 table.Columns.Add("IsKey", typeof(bool));
                 table.Columns.Add("IsUnique", typeof(bool));
 
                 for (int i = 0; i < _fieldNames.Count; i++)
                 {
                     var row = table.NewRow();
-                    var name = _defields?.ContainsKey(_fieldNames[i]) == true ? _defields[_fieldNames[i]].Name : _fieldNames[i];
+                    var _defield = _defields?.ContainsKey(_fieldNames[i]) == true ? _defields[_fieldNames[i]] : null;
+                    var name = _defield?.Name ?? _fieldNames[i];
                     var isKey = _keyFieldSet.Contains(name);
 
                     row["ColumnName"] = name;
                     row["ColumnOrdinal"] = i;
                     row["ColumnSize"] = int.MaxValue;
                     row["DataType"] = _defields?.ContainsKey(_fieldNames[i]) == true ? _defields[_fieldNames[i]].DataType : typeof(string);
-                    row["AllowDBNull"] = !isKey; // primary key fields marked non-nullable in schema
+                    row["AllowDBNull"] = !isKey && _defield?.IsNullable != false; // primary key fields marked non-nullable in schema
                     row["IsKey"] = isKey;
-                    row["IsUnique"] = isKey; // keys are typically unique
+                    row["IsUnique"] = false; // DE does not have unique constraints except for primary key(s)
                     table.Rows.Add(row);
                 }
 
