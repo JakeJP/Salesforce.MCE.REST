@@ -42,8 +42,10 @@ implemented API clients are:
 
 | API section | Class Name | Implementation |
 |----|---------------------|:--:|
+| Address | Address | 〇 |
 | Auth | Auth | 〇 |
 | Automation Studio | AutomationStudio | 〇 |
+| Campaigns | Campaigns | 〇 |
 | Contacts | Contacts | △ |
 | Event Notification | EventNotification | 〇 |
 | Data Extensions | DataExtensions | 〇 |
